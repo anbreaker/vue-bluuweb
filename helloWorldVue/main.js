@@ -25,4 +25,14 @@ const app = Vue.createApp({
       this.quantity = this.quantity - value;
     },
   },
+
+  computed: {
+    colorQuantity() {
+      return this.quantity > 500 ? 'text-success' : 'text-danger';
+    },
+
+    upperTitle() {
+      return this.title.toUpperCase();
+    },
+  },
 });

@@ -16,11 +16,9 @@
   </head>
   <body>
     <div id="app">
-      <h1>{{ title }}</h1>
+      <h1>{{ upperTitle }}</h1>
 
-      <h2 class="bg-dark" :class="[quantity > 500 ? 'text-success' : 'text-danger']">
-        Available balance: {{quantity }}
-      </h2>
+      <h2 class="bg-dark" :class="colorQuantity">Available balance: {{quantity }}</h2>
       <a :href="link">Go to Google!</a>
 
       <hr />
@@ -46,10 +44,13 @@
       <hr />
       <button v-on:click="addCredit">Add Credit</button>
       <button @click="reduceCredit(100)" :disabled="activate">Reduce Credit</button>
+
+      <footer-bank :value="quantity" date="Martes 29" />
     </div>
 
     <script src="https://unpkg.com/vue@next"></script>
     <script src="main.js"></script>
+    <script src="components/Footer.js"></script>
     <script>
       const mountedApp = app.mount('#app');
     </script>
