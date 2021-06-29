@@ -4,12 +4,50 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
     <title>VueJs</title>
   </head>
   <body>
     <div id="app">
       <h1>{{ title }}</h1>
+
+      <h2 class="bg-dark" :class="[quantity > 500 ? 'text-success' : 'text-danger']">
+        Available balance: {{quantity }}
+      </h2>
+      <a :href="link">Go to Google!</a>
+
+      <hr />
+
+      <h2 v-if="status">Activated Account</h2>
+      <h2 v-else="status">Account Deactivated</h2>
+
+      <hr />
+
+      <h2 v-if="quantity > 500">Quantity: {{quantity }}</h2>
+      <h2 v-else-if="quantity <= 500 && quantity > 0">
+        Quantity
+        <span style="color: crimson">{{ quantity }}</span>
+      </h2>
+      <h2 v-else>Without Quantity {{ quantity }}</h2>
+
+      <hr />
+      <h2>My Services</h2>
+      <ul>
+        <li v-for="(item,index) in services" :key="index">{{ index + 1 }}. {{ item }}</li>
+      </ul>
+
+      <hr />
+      <button v-on:click="addCredit">Add Credit</button>
+      <button @click="reduceCredit(100)" :disabled="activate">Reduce Credit</button>
     </div>
+
     <script src="https://unpkg.com/vue@next"></script>
     <script src="main.js"></script>
     <script>
