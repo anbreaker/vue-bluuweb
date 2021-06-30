@@ -1,16 +1,27 @@
 <template>
   <div class="home">
     <h1 :style="colorCount">{{ title }}: {{ count }}</h1>
+
+    <button @click="actionIncrease">Increase</button>
+
+    <BtnDecrement />
+    <hr />
+
+    <BtnAction :status="true" />
+    <BtnAction :status="false" />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
+
+import BtnDecrement from '@/components/BtnDecrement.vue';
+import BtnAction from '@/components/BtnAction.vue';
 
 export default {
   name: 'Home',
 
-  components: {},
+  components: { BtnDecrement, BtnAction },
 
   data() {
     return {
@@ -23,6 +34,11 @@ export default {
     colorCount() {
       return this.count >= 100 ? { color: 'green' } : { color: 'red' };
     },
+  },
+
+  methods: {
+    ...mapMutations(['increase']),
+    ...mapActions(['actionIncrease']),
   },
 };
 </script>
