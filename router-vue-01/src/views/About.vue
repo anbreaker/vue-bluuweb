@@ -1,5 +1,17 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <Title text="This is an about page" />
   </div>
 </template>
+
+<script>
+import Title from '@/components/Title.vue';
+
+export default {
+  components: {
+    Title,
+  },
+};
+</script>
+
+<style></style>
