@@ -2,7 +2,7 @@
   <div class="home">
     <h1 :style="colorCount">{{ title }}: {{ count }}</h1>
 
-    <button @click="actionIncrease">Increase</button>
+    <button @click="actionIncrement">Increment</button>
 
     <BtnDecrement />
     <hr />
@@ -37,8 +37,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['increase']),
-    ...mapActions(['actionIncrease']),
+    ...mapMutations(['increment']),
+    ...mapActions(['actionIncrement']),
   },
 };
 </script>

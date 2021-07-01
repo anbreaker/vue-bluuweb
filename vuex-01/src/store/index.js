@@ -6,8 +6,8 @@ export default createStore({
   },
 
   mutations: {
-    increase(state) {
-      state.count = state.count + 10;
+    increment(state, payload) {
+      state.count = state.count + payload;
     },
 
     decrement(state, payload) {
@@ -16,12 +16,19 @@ export default createStore({
   },
 
   actions: {
-    actionIncrease({ commit }) {
-      commit('increase');
+    actionIncrement({ commit }) {
+      commit('increment', 10);
     },
 
     actionDecrement({ commit }, value) {
       commit('decrement', value);
+    },
+
+    actionBtn({ commit }, objeto) {
+      const { status, value } = objeto;
+
+      if (status) commit('increment', value);
+      else commit('decrement', value);
     },
   },
 
