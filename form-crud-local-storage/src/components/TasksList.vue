@@ -24,7 +24,17 @@
         <td>{{ task.status }}</td>
         <td>{{ task.numbers }}</td>
         <td>
-          <button class="mr-2 btn btn-warning btn-sm">Edit</button>
+          <router-link
+            class="mr-2 btn btn-warning btn-sm"
+            :to="{
+              name: 'Edit',
+              params: {
+                id: task.id,
+              },
+            }"
+            >Edit</router-link
+          >
+
           <button class="btn btn-danger btn-sm" @click="deleteTask(task.id)">
             Delete
           </button>
