@@ -1,10 +1,10 @@
 <template>
-  <form>
+  <form @submit.prevent="useForm">
     <input
       type="text"
       class="form-control my-2"
       placeholder="Enter Name"
-      v-model="task.name"
+      v-model.trim="task.name"
     />
     <div>
       <div class="form-check form-check-inline">
@@ -55,6 +55,10 @@
     <div class="mt-2">
       <input type="number" class="form-control" v-model.number="task.numbers" />
     </div>
+
+    <button class="btn btn-dark mt-2 btn-block" type="submit" :disabled="blockSubmitBtn">
+      Execute!
+    </button>
   </form>
 
   <hr />
@@ -74,6 +78,32 @@ export default {
         numbers: 0,
       },
     };
+  },
+
+  methods: {
+    useForm() {
+      console.log(this.task);
+
+      if (this.task.name.trim() === '') {
+        console.log('Field Empty');
+        return;
+      }
+      console.log('Field With data.');
+      // Send Data...
+
+      this.task = {
+        name: '',
+        categories: [],
+        status: '',
+        numbers: 0,
+      };
+    },
+  },
+
+  computed: {
+    blockSubmitBtn() {
+      return this.task.name.trim() === '' ? true : false;
+    },
   },
 };
 </script>
