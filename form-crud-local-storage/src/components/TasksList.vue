@@ -1,5 +1,4 @@
 <template>
-  {{ tasks }}
   <table class="table">
     <thead>
       <tr>
