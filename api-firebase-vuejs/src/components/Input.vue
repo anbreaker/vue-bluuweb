@@ -1,4 +1,6 @@
 <template>
+  <h1 class="mt-2 mb-4">Forms VueJs</h1>
+
   <input
     type="text"
     class="form-control my-2"
