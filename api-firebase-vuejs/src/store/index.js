@@ -1,6 +1,9 @@
 import { createStore } from 'vuex';
+require('dotenv').config();
 
 import router from '../router';
+
+const url = process.env.VUE_APP_URL_FIREBASE;
 
 export default createStore({
   state: {
@@ -47,24 +50,69 @@ export default createStore({
   },
 
   actions: {
-    loadLocalStorage({ commit }) {
-      //
+    async loadFirebaseDB({ commit }) {
+      try {
+        const response = await fetch(`${url}.json`);
+        const dataDB = await response.json();
+
+        const arrayTasks = [];
+
+        for (let id in dataDB) {
+          arrayTasks.push(dataDB[id]);
+        }
+
+        commit('actionLoad', arrayTasks);
+      } catch (error) {
+        console.log(error);
+      }
     },
 
-    setTasks({ commit }, task) {
-      commit('actionSet', task);
+    async setTasks({ commit }, task) {
+      try {
+        const response = await fetch(`${url}/${task.id}.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(task),
+        });
+
+        const dataDB = await response.json();
+        console.log(dataDB, '<-- Enviado');
+
+        commit('actionSet', task);
+      } catch (error) {
+        console.log(error);
+      }
     },
 
-    deleteTask({ commit }, id) {
-      commit('actionDeleteTask', id);
+    async deleteTask({ commit }, id) {
+      try {
+        await fetch(`${url}/${id}.json`, {
+          method: 'DELETE',
+        });
+
+        commit('actionDeleteTask', id);
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     setTask({ commit }, id) {
       commit('actionEditTask', id);
     },
 
-    updateTask({ commit }, task) {
-      commit('actionUpdateTask', task);
+    async updateTask({ commit }, task) {
+      try {
+        const response = await fetch(`${url}/${task.id}.json`, {
+          method: 'PATCH',
+          body: JSON.stringify(task),
+        });
+
+        const dataDB = await response.json();
+
+        commit('actionUpdateTask', dataDB);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 

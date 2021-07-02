@@ -1,6 +1,4 @@
 <template>
-  <b> Editar: {{ $route.params.id }} - {{ task }}</b>
-
   <form @submit.prevent="updateTask(task)">
     <Input :task="task" />
   </form>

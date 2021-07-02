@@ -17,13 +17,11 @@ export default {
   },
 
   methods: {
-    ...mapActions(['loadLocalStorage']),
+    ...mapActions(['loadFirebaseDB']),
   },
 
   created() {
-    console.log('entro aqui');
-
-    this.loadLocalStorage();
+    this.loadFirebaseDB();
   },
 };
 </script>

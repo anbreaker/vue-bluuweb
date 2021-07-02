@@ -15,10 +15,12 @@
         <th scope="row">{{ task.id }}</th>
         <td>{{ task.name }}</td>
         <td>
-          <!-- <span v-for="(category, index) in task.categories" :key="index">
+          <span v-for="(category, index) in task.categories" :key="index">
             {{ index > 0 ? `, ${category} ` : category }}
-          </span> -->
-          {{ task.categories.join(', ') }}
+          </span>
+
+          <!-- Como hacer Reactivo esto... -->
+          <!-- {{ task.categories.join(', ') }} -->
         </td>
         <td>{{ task.status }}</td>
         <td>{{ task.numbers }}</td>
