@@ -18,9 +18,9 @@ export default createStore({
       status: '',
       numbers: 0,
     },
-  },
 
-  user: null,
+    user: null,
+  },
 
   mutations: {
     setUser(state, payload) {
@@ -102,8 +102,9 @@ export default createStore({
 
     async loadFirebaseDB({ commit, state }) {
       try {
-        // const { localId, idToken } = state.user;
-        const response = await fetch(`${urlDB}.json`);
+        const { localId, idToken } = state.user;
+
+        const response = await fetch(`${urlDB}/${localId}.json?auth=${idToken}`);
         const dataDB = await response.json();
 
         const arrayTasks = [];
@@ -118,14 +119,17 @@ export default createStore({
       }
     },
 
-    async setTasks({ commit }, task) {
+    async setTasks({ commit, state }, task) {
       try {
         const { id } = task;
-        const response = await fetch(`${urlDB}/${id}.json`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(task),
-        });
+        const response = await fetch(
+          `${urlDB}/${state.user.localId}/${id}.json?auth=${state.user.idToken}`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(task),
+          }
+        );
 
         const dataDB = await response.json();
         console.log(dataDB, '<-- Enviado');
@@ -136,11 +140,14 @@ export default createStore({
       }
     },
 
-    async deleteTask({ commit }, id) {
+    async deleteTask({ commit, state }, id) {
       try {
-        await fetch(`${urlDB}/${id}.json`, {
-          method: 'DELETE',
-        });
+        await fetch(
+          `${urlDB}/${state.user.localId}/${id}.json?auth=${state.user.idToken}`,
+          {
+            method: 'DELETE',
+          }
+        );
 
         commit('actionDeleteTask', id);
       } catch (error) {
@@ -148,16 +155,19 @@ export default createStore({
       }
     },
 
-    setTask({ commit }, id) {
+    setTask({ commit, state }, id) {
       commit('actionEditTask', id);
     },
 
-    async updateTask({ commit }, task) {
+    async updateTask({ commit, state }, task) {
       try {
-        const response = await fetch(`${urlDB}/${task.id}.json`, {
-          method: 'PATCH',
-          body: JSON.stringify(task),
-        });
+        const response = await fetch(
+          `${urlDB}/${state.user.localId}/${task.id}.json?auth=${state.user.idToken}`,
+          {
+            method: 'PATCH',
+            body: JSON.stringify(task),
+          }
+        );
 
         const dataDB = await response.json();
 
