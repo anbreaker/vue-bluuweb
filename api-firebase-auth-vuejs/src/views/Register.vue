@@ -1,7 +1,8 @@
+import { mapActions } from 'vuex';
 <template>
   <h1 class="my-5">Register Users</h1>
 
-  <form>
+  <form @submit.prevent="processForm">
     <input
       class="form-control my-2"
       type="email"
@@ -26,12 +27,15 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   data() {
     return {
-      email: '',
-      pass1: '',
-      pass2: '',
+      // TODO delete this on production, For testing only
+      email: 'anbreaker@test.com',
+      pass1: '123456',
+      pass2: '123456',
     };
   },
 
@@ -41,6 +45,17 @@ export default {
 
       if (this.pass1.length > 5 && this.pass1 === this.pass2) return false;
       else return true;
+    },
+  },
+
+  methods: {
+    ...mapActions(['registerUser']),
+
+    processForm() {
+      this.registerUser({ email: this.email, password: this.pass1 });
+      this.email = '';
+      this.pass1 = '';
+      this.pass2 = '';
     },
   },
 };

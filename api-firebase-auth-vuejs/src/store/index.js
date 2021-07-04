@@ -3,7 +3,8 @@ require('dotenv').config();
 
 import router from '../router';
 
-const url = process.env.VUE_APP_URL_FIREBASE;
+const urlDB = process.env.VUE_APP_URL_FIREBASE;
+const urlApiKey = process.env.VUE_APP_KEY;
 
 export default createStore({
   state: {
@@ -18,7 +19,13 @@ export default createStore({
     },
   },
 
+  user: null,
+
   mutations: {
+    setUser(state, payload) {
+      state.user = payload;
+    },
+
     actionLoad(state, payload) {
       state.tasks = payload;
     },
@@ -50,9 +57,32 @@ export default createStore({
   },
 
   actions: {
+    async registerUser({ commit }, user) {
+      try {
+        const { email, password } = user;
+
+        const response = await fetch(urlApiKey, {
+          method: 'POST',
+          body: JSON.stringify({ email, password, returnSecureToken: true }),
+        });
+
+        const userDB = await response.json();
+        console.log(userDB);
+
+        if (userDB.error) {
+          console.log(userDB.error);
+          return;
+        }
+
+        commit('setUser', userDB);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     async loadFirebaseDB({ commit }) {
       try {
-        const response = await fetch(`${url}.json`);
+        const response = await fetch(`${urlDB}.json`);
         const dataDB = await response.json();
 
         const arrayTasks = [];
@@ -69,7 +99,7 @@ export default createStore({
 
     async setTasks({ commit }, task) {
       try {
-        const response = await fetch(`${url}/${task.id}.json`, {
+        const response = await fetch(`${urlDB}/${task.id}.json`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(task),
@@ -86,7 +116,7 @@ export default createStore({
 
     async deleteTask({ commit }, id) {
       try {
-        await fetch(`${url}/${id}.json`, {
+        await fetch(`${urlDB}/${id}.json`, {
           method: 'DELETE',
         });
 
@@ -102,7 +132,7 @@ export default createStore({
 
     async updateTask({ commit }, task) {
       try {
-        const response = await fetch(`${url}/${task.id}.json`, {
+        const response = await fetch(`${urlDB}/${task.id}.json`, {
           method: 'PATCH',
           body: JSON.stringify(task),
         });
