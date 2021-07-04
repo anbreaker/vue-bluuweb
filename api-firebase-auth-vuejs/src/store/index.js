@@ -102,9 +102,8 @@ export default createStore({
 
     async loadFirebaseDB({ commit, state }) {
       try {
-        const { localId, idToken } = state.user;
+        // const { localId, idToken } = state.user;
         const response = await fetch(`${urlDB}.json`);
-
         const dataDB = await response.json();
 
         const arrayTasks = [];
@@ -121,7 +120,8 @@ export default createStore({
 
     async setTasks({ commit }, task) {
       try {
-        const response = await fetch(`${urlDB}/${task.id}.json`, {
+        const { id } = task;
+        const response = await fetch(`${urlDB}/${id}.json`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(task),
