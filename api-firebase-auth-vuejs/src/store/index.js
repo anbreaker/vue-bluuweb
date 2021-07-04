@@ -5,6 +5,7 @@ import router from '../router';
 
 const urlDB = process.env.VUE_APP_URL_FIREBASE;
 const urlApiKey = process.env.VUE_APP_KEY;
+const urlLoginFirebase = process.env.VUE_APP_LOGIN_FIREBASE;
 
 export default createStore({
   state: {
@@ -57,6 +58,27 @@ export default createStore({
   },
 
   actions: {
+    async loginUser({ commit }, user) {
+      try {
+        const { email, password } = user;
+
+        const response = await fetch(urlLoginFirebase, {
+          method: 'POST',
+          body: JSON.stringify({ email, password, returnSecureToken: true }),
+        });
+
+        const userDB = await response.json();
+
+        if (userDB.error) return console.log(userDB.error);
+
+        commit('setUser', userDB);
+
+        router.push('/');
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     async registerUser({ commit }, user) {
       try {
         const { email, password } = user;
@@ -69,20 +91,20 @@ export default createStore({
         const userDB = await response.json();
         console.log(userDB);
 
-        if (userDB.error) {
-          console.log(userDB.error);
-          return;
-        }
+        if (userDB.error) return console.log(userDB.error);
 
         commit('setUser', userDB);
+        router.push('/');
       } catch (error) {
         console.log(error);
       }
     },
 
-    async loadFirebaseDB({ commit }) {
+    async loadFirebaseDB({ commit, state }) {
       try {
+        const { localId, idToken } = state.user;
         const response = await fetch(`${urlDB}.json`);
+
         const dataDB = await response.json();
 
         const arrayTasks = [];

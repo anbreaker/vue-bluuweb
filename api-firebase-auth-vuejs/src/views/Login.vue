@@ -1,5 +1,5 @@
 <template>
-  <h1 class="my-5">Register Users</h1>
+  <h1 class="my-5">Login User</h1>
 
   <form @submit.prevent="processForm">
     <input
@@ -14,14 +14,8 @@
       placeholder="Your Password"
       v-model.trim="pass1"
     />
-    <input
-      class="form-control my-2"
-      type="password"
-      placeholder="Your Password"
-      v-model.trim="pass2"
-    />
 
-    <button class="btn btn-primary" type="submit" :disabled="blockBtn">Register</button>
+    <button class="btn btn-primary" type="submit" :disabled="blockBtn">Login!</button>
   </form>
 </template>
 
@@ -34,7 +28,6 @@ export default {
       // TODO delete this on production, For testing only
       email: 'anbreaker@test.com',
       pass1: '123456',
-      pass2: '123456',
     };
   },
 
@@ -42,19 +35,18 @@ export default {
     blockBtn() {
       if (!this.email.includes('@')) return true;
 
-      if (this.pass1.length > 5 && this.pass1 === this.pass2) return false;
+      if (this.pass1.length > 5) return false;
       else return true;
     },
   },
 
   methods: {
-    ...mapActions(['registerUser']),
+    ...mapActions(['loginUser']),
 
     processForm() {
-      this.registerUser({ email: this.email, password: this.pass1 });
+      this.loginUser({ email: this.email, password: this.pass1 });
       this.email = '';
       this.pass1 = '';
-      this.pass2 = '';
     },
   },
 };

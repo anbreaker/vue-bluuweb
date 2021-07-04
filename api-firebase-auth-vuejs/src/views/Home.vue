@@ -35,7 +35,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['setTasks']),
+    ...mapActions(['setTasks', 'loadFirebaseDB']),
 
     useForm() {
       console.log(this.task);
@@ -61,6 +61,10 @@ export default {
         numbers: 0,
       };
     },
+  },
+
+  created() {
+    this.loadFirebaseDB();
   },
 };
 </script>
