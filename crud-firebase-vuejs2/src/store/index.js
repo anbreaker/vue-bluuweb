@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import { db } from '../firebase.config';
+import { auth, db } from '../firebase.config';
 import router from '../router';
 
 Vue.use(Vuex);
@@ -11,9 +11,22 @@ export default new Vuex.Store({
     tasks: [],
 
     task: { name: '', id: '' },
+
+    user: null,
+
+    error: null,
   },
 
   mutations: {
+    setUser(state, payload) {
+      const { user } = state;
+      user = payload;
+    },
+
+    setError(state, payload) {
+      state.error = payload;
+    },
+
     setTasks(state, payload) {
       state.tasks = payload;
     },
@@ -28,6 +41,26 @@ export default new Vuex.Store({
   },
 
   actions: {
+    async registerUser({ commit }, user) {
+      try {
+        const { email, password } = user;
+        const response = await auth.createUserWithEmailAndPassword(email, password);
+
+        const newUser = {
+          email,
+          uid: response.user.uid,
+        };
+
+        console.log(newUser);
+
+        commit('setUser', newUser);
+      } catch (error) {
+        console.log(error);
+
+        commit('setError', error);
+      }
+    },
+
     async getTasks({ commit }) {
       try {
         const tasks = [];
