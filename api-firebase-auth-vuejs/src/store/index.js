@@ -79,6 +79,11 @@ export default createStore({
       }
     },
 
+    signOutUser({ commit }) {
+      commit('setUser', null);
+      router.push('/login');
+    },
+
     async registerUser({ commit }, user) {
       try {
         const { email, password } = user;
@@ -178,5 +183,10 @@ export default createStore({
     },
   },
 
+  getters: {
+    authenticatedUser(state) {
+      return !!state.user;
+    },
+  },
   modules: {},
 });
