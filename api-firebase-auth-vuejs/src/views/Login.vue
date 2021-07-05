@@ -25,9 +25,8 @@ import { mapActions } from 'vuex';
 export default {
   data() {
     return {
-      // TODO delete this on production, For testing only
-      email: 'anbreaker@test.com',
-      pass1: '123456',
+      email: '',
+      pass1: '',
     };
   },
 

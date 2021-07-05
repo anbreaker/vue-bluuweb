@@ -33,8 +33,6 @@ export default createStore({
 
     actionSet(state, payload) {
       state.tasks.push(payload);
-
-      console.log(state.task);
     },
 
     actionDeleteTask(state, payload) {
@@ -74,6 +72,8 @@ export default createStore({
         commit('setUser', userDB);
 
         router.push('/');
+
+        localStorage.setItem('user', JSON.stringify(userDB));
       } catch (error) {
         console.log(error);
       }
@@ -82,6 +82,8 @@ export default createStore({
     signOutUser({ commit }) {
       commit('setUser', null);
       router.push('/login');
+
+      localStorage.removeItem('user');
     },
 
     async registerUser({ commit }, user) {
@@ -100,12 +102,20 @@ export default createStore({
 
         commit('setUser', userDB);
         router.push('/');
+
+        localStorage.setItem('user', JSON.stringify(userDB));
       } catch (error) {
         console.log(error);
       }
     },
 
     async loadFirebaseDB({ commit, state }) {
+      if (localStorage.getItem('user')) {
+        commit('setUser', JSON.parse(localStorage.getItem('user')));
+      } else {
+        return commit('setUser', null);
+      }
+
       try {
         const { localId, idToken } = state.user;
 
