@@ -20,9 +20,34 @@ export default createStore({
     },
 
     user: null,
+
+    error: {
+      type: null,
+      message: null,
+    },
   },
 
   mutations: {
+    setError(state, payload) {
+      if (payload === null) return (state.error = { type: null, message: null });
+
+      if (payload === 'EMAIL_NOT_FOUND') {
+        return (state.error = { type: 'email', message: 'Email Not Found' });
+      }
+
+      if (payload === 'INVALID_PASSWORD') {
+        return (state.error = { type: 'password', message: 'Invalid Password' });
+      }
+
+      if (payload === 'EMAIL_EXISTS') {
+        return (state.error = { type: 'email', message: 'Email Exists!' });
+      }
+
+      if (payload === 'INVALID_EMAIL') {
+        return (state.error = { type: 'email', message: 'Invalid Email!' });
+      }
+    },
+
     setUser(state, payload) {
       state.user = payload;
     },
@@ -67,9 +92,16 @@ export default createStore({
 
         const userDB = await response.json();
 
-        if (userDB.error) return console.log(userDB.error);
+        if (userDB.error) {
+          console.log(userDB.error);
+
+          return commit('setError', userDB.error.message);
+        }
 
         commit('setUser', userDB);
+
+        // To clean form
+        commit('setError', null);
 
         router.push('/');
 
@@ -96,12 +128,18 @@ export default createStore({
         });
 
         const userDB = await response.json();
-        console.log(userDB);
 
-        if (userDB.error) return console.log(userDB.error);
+        if (userDB.error) {
+          console.log(userDB.error);
+
+          return commit('setError', userDB.error.message);
+        }
 
         commit('setUser', userDB);
         router.push('/');
+
+        // To clean form
+        commit('setError', null);
 
         localStorage.setItem('user', JSON.stringify(userDB));
       } catch (error) {
@@ -147,7 +185,6 @@ export default createStore({
         );
 
         const dataDB = await response.json();
-        console.log(dataDB, '<-- Enviado');
 
         commit('actionSet', task);
       } catch (error) {

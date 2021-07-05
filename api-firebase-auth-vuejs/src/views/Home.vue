@@ -44,7 +44,6 @@ export default {
         console.log('Field Empty');
         return;
       }
-      console.log('Field With data.');
 
       // Create id
       this.task.id = shortid.generate();

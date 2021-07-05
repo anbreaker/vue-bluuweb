@@ -34,7 +34,8 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(to.meta.privateRoute);
+  // console.log(to.meta.privateRoute); --> true
+
   if (to.meta.privateRoute) {
     if (store.getters.authenticatedUser) next();
     else next('/login');
