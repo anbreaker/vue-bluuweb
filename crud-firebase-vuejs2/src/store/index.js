@@ -50,8 +50,8 @@ export default new Vuex.Store({
           uid: response.user.uid,
         };
 
-        // Create Colletions DataBase Firestore
-        await db.collection(email).add();
+        // Create Colletions DataBase Firestore but, firebase --> Error on addDoc???
+        // await db.collection(email).add();
 
         commit('setUser', newUser);
         router.push('/');
