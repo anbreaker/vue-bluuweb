@@ -21,6 +21,7 @@ const routes = [
   {
     path: '/edit/:id',
     name: 'Edit',
+    meta: { privateRoute: true },
     component: () => import('../views/Edit.vue'),
   },
   {

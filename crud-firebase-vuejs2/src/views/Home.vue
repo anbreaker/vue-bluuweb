@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="row">
+    <div class="row my-5">
       <div class="col mb-2">
         <h1 class="float-left">Home</h1>
         <h1 class="float-right" v-if="user">{{ user.email }}</h1>
@@ -30,8 +30,11 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+
 export default {
   name: 'Home',
+
+  components: {},
 
   created() {
     this.getTasks();

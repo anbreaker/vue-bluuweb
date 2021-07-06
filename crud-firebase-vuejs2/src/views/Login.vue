@@ -2,6 +2,8 @@
   <div>
     <h1 class="my-5">Login User</h1>
 
+    <div class="alert alert-danger" v-if="error !== null">{{ error }}</div>
+
     <form @submit.prevent="loginUser({ email, password: pass1 })">
       <input
         class="form-control my-2"
@@ -18,7 +20,6 @@
 
       <button class="btn btn-primary" type="submit">Login!</button>
     </form>
-    <p>{{ error }}</p>
   </div>
 </template>
 

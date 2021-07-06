@@ -50,6 +50,9 @@ export default new Vuex.Store({
           uid: response.user.uid,
         };
 
+        // Create Colletions DataBase Firestore
+        await db.collection(email).add();
+
         commit('setUser', newUser);
         router.push('/');
       } catch (error) {
@@ -87,10 +90,11 @@ export default new Vuex.Store({
       commit('setUser', user);
     },
 
-    async getTasks({ commit }) {
+    async getTasks({ commit, state }) {
       try {
         const tasks = [];
-        const response = await db.collection('tasks').get();
+
+        const response = await db.collection(state.user.email).get();
 
         response.forEach((doc) => {
           let task = doc.data();
@@ -104,10 +108,10 @@ export default new Vuex.Store({
       }
     },
 
-    async getTask({ commit }, idTask) {
+    async getTask({ commit, state }, idTask) {
       try {
         const doc = await db
-          .collection('tasks')
+          .collection(state.user.email)
           .doc(idTask)
           .get();
 
@@ -120,11 +124,11 @@ export default new Vuex.Store({
       }
     },
 
-    async editTask({ commit }, task) {
+    async editTask({ commit, state }, task) {
       try {
         const { name, id } = task;
         await db
-          .collection('tasks')
+          .collection(state.user.email)
           .doc(id)
           .update({ name });
 
@@ -134,9 +138,9 @@ export default new Vuex.Store({
       }
     },
 
-    async addTask({ commit }, taskName) {
+    async addTask({ commit, state }, taskName) {
       try {
-        await db.collection('tasks').add({ name: taskName });
+        await db.collection(state.user.email).add({ name: taskName });
 
         router.push('/');
       } catch (error) {
@@ -144,10 +148,10 @@ export default new Vuex.Store({
       }
     },
 
-    async deleteTask({ commit, dispatch }, taskId) {
+    async deleteTask({ commit, state, dispatch }, taskId) {
       try {
         await db
-          .collection('tasks')
+          .collection(state.user.email)
           .doc(taskId)
           .delete();
 
@@ -158,6 +162,13 @@ export default new Vuex.Store({
       } catch (error) {
         console.log(error);
       }
+    },
+  },
+
+  getters: {
+    authenticatedUser(state) {
+      if (state.user === null) return false;
+      else return true;
     },
   },
 

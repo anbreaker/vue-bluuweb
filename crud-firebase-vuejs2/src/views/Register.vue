@@ -2,7 +2,7 @@
   <div>
     <h1 class="my-5">Register Users</h1>
 
-    <!-- <div class="alert alert-danger" v-if="error.type !== null">{{ error.message }}</div> -->
+    <div class="alert alert-danger" v-if="error !== null">{{ error }}</div>
 
     <form @submit.prevent="registerUser({ email, password: pass1 })">
       <input
@@ -29,7 +29,6 @@
         Register User
       </button>
     </form>
-    <p>{{ error }}</p>
   </div>
 </template>
 
@@ -41,9 +40,9 @@ export default {
 
   data() {
     return {
-      email: 'test@test.com',
-      pass1: '123',
-      pass2: '123',
+      email: '',
+      pass1: '',
+      pass2: '',
     };
   },
 
