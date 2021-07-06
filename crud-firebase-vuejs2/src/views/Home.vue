@@ -1,6 +1,11 @@
 <template>
   <div class="home">
-    <h1>Home</h1>
+    <div class="row">
+      <div class="col mb-2">
+        <h1 class="float-left">Home</h1>
+        <h1 class="float-right" v-if="user">{{ user.email }}</h1>
+      </div>
+    </div>
 
     <router-link to="/add">
       <button class="btn btn-success btn-block">Add Task</button>
@@ -37,7 +42,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['tasks']),
+    ...mapState(['tasks', 'user']),
   },
 };
 </script>

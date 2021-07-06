@@ -19,8 +19,7 @@ export default new Vuex.Store({
 
   mutations: {
     setUser(state, payload) {
-      const { user } = state;
-      user = payload;
+      state.user = payload;
     },
 
     setError(state, payload) {
@@ -51,14 +50,41 @@ export default new Vuex.Store({
           uid: response.user.uid,
         };
 
-        console.log(newUser);
-
         commit('setUser', newUser);
+        router.push('/');
       } catch (error) {
         console.log(error);
 
         commit('setError', error);
       }
+    },
+
+    async loginUser({ commit }, user) {
+      try {
+        const { email, password } = user;
+        const response = await auth.signInWithEmailAndPassword(email, password);
+
+        const userLogged = {
+          email,
+          uid: response.user.uid,
+        };
+
+        commit('setUser', userLogged);
+        router.push('/');
+      } catch (error) {
+        console.log(error);
+        commit('setError', error);
+      }
+    },
+
+    async signOutUser({ commit }) {
+      await auth.signOut();
+
+      router.push('/login');
+    },
+
+    async activeUser({ commit }, user) {
+      commit('setUser', user);
     },
 
     async getTasks({ commit }) {
