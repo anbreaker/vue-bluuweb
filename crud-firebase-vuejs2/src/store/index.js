@@ -15,6 +15,8 @@ export default new Vuex.Store({
     user: null,
 
     error: null,
+
+    loading: false,
   },
 
   mutations: {
@@ -36,6 +38,10 @@ export default new Vuex.Store({
 
     setDeleteTask(state, payload) {
       state.tasks = state.tasks.filter((item) => item.id !== payload);
+    },
+
+    loadingFirebase(state, payload) {
+      state.loading = payload;
     },
   },
 
@@ -92,6 +98,9 @@ export default new Vuex.Store({
 
     async getTasks({ commit, state }) {
       try {
+        //Run spinner
+        commit('loadingFirebase', true);
+
         const tasks = [];
 
         const response = await db.collection(state.user.email).get();
@@ -101,6 +110,9 @@ export default new Vuex.Store({
           task.id = doc.id;
           tasks.push(task);
         });
+
+        // Stop spinner
+        commit('loadingFirebase', false);
 
         commit('setTasks', tasks);
       } catch (error) {
