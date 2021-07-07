@@ -17,6 +17,8 @@ export default new Vuex.Store({
     error: null,
 
     loading: false,
+
+    searchTask: '',
   },
 
   mutations: {
@@ -46,6 +48,10 @@ export default new Vuex.Store({
   },
 
   actions: {
+    searchTaskByText({ commit, state }, payload) {
+      state.searchTask = payload.toLowerCase();
+    },
+
     async registerUser({ commit }, user) {
       try {
         const { email, password } = user;
@@ -185,6 +191,20 @@ export default new Vuex.Store({
     authenticatedUser(state) {
       if (state.user === null) return false;
       else return true;
+    },
+
+    searchTaskArrayFilter(state) {
+      let filterTasks = [];
+
+      for (const task of state.tasks) {
+        let name = task.name.toLowerCase();
+
+        if (name.indexOf(state.searchTask) >= 0) {
+          filterTasks.push(task);
+        }
+      }
+
+      return filterTasks;
     },
   },
 

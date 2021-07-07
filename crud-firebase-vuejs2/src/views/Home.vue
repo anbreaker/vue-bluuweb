@@ -12,11 +12,27 @@
     </router-link>
 
     <div v-if="loading" class="text-center ">
+      <h3>Loading...</h3>
       <PulseLoader :loading="loading" class="mt-5"></PulseLoader>
     </div>
 
+    <form class="mt-4" @submit.prevent="searchTaskByText(searchTask)">
+      <h4>Serch Task!</h4>
+      <input
+        class="form-control"
+        type="text"
+        placeholder="Search"
+        v-model="searchTask"
+        v-on:keyup="searchTaskByText(searchTask)"
+      />
+    </form>
+
     <ul class="list-group mt-5" v-if="!loading">
-      <li class="list-group-item" v-for="(item, index) in tasks" :key="index">
+      <li
+        class="list-group-item"
+        v-for="(item, index) in searchTaskArrayFilter"
+        :key="index"
+      >
         {{ item.name }} - {{ item.id }}
 
         <div class="float-right">
@@ -33,11 +49,17 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 
 export default {
   name: 'Home',
+
+  data() {
+    return {
+      searchTask: '',
+    };
+  },
 
   components: { PulseLoader },
 
@@ -46,11 +68,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getTasks', 'deleteTask']),
+    ...mapActions(['getTasks', 'deleteTask', 'searchTaskByText']),
   },
 
   computed: {
     ...mapState(['tasks', 'user', 'loading']),
+    ...mapGetters(['searchTaskArrayFilter']),
   },
 };
 </script>
