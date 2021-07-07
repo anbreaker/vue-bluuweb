@@ -7,28 +7,40 @@
       </div>
     </div>
 
-    <form @submit.prevent="addTask(name)" class="">
+    <form @submit.prevent="addTask(nameTask)" class="">
       <div class="input-group mb-2 mr-sm-2">
         <div class="input-group-prepend">
           <div class="input-group-text">Name</div>
         </div>
-        <input type="text" class="form-control" v-model="name" />
+        <input type="text" class="form-control" v-model="nameTask" />
       </div>
 
-      <button type="submit" class="btn btn-primary mt-2">Add Task</button>
+      <button
+        type="submit"
+        class="btn btn-primary mt-2"
+        :disabled="$v.$invalid || loading"
+      >
+        Add Task
+      </button>
     </form>
+    <br />
+    <small v-if="!$v.nameTask.required" class="text-danger">Field required</small>
+    <small v-if="!$v.nameTask.minLength" class="text-danger"
+      >Min Length 3 characteres</small
+    >
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
+const { required, minLength } = require('vuelidate/lib/validators');
 
 export default {
   name: 'Add',
 
   data() {
     return {
-      name: '',
+      nameTask: '',
     };
   },
 
@@ -36,7 +48,11 @@ export default {
     ...mapActions(['addTask']),
   },
   computed: {
-    ...mapState(['user']),
+    ...mapState(['user', 'loading']),
+  },
+
+  validations: {
+    nameTask: { required, minLength: minLength(3) },
   },
 };
 </script>

@@ -122,6 +122,9 @@ export default new Vuex.Store({
 
     async getTask({ commit, state }, idTask) {
       try {
+        // To control of many pulse on AddTask
+        commit('loadingFirebase', true);
+
         const doc = await db
           .collection(state.user.email)
           .doc(idTask)
@@ -130,6 +133,7 @@ export default new Vuex.Store({
         let task = doc.data();
         task.id = doc.id;
 
+        commit('loadingFirebase', false);
         commit('setTask', task);
       } catch (error) {
         console.log(error);
