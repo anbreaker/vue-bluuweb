@@ -8,6 +8,11 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: '/init',
+    name: 'Init',
+    component: () => import('../views/Init.vue'),
+  },
+  {
     path: '/',
     name: 'Home',
     meta: { privateRoute: true },
@@ -46,7 +51,8 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.privateRoute)) {
     const userActive = auth.currentUser;
 
-    if (!userActive) next({ path: '/login' });
+    // Default Route
+    if (!userActive) next({ path: '/init' });
     else next();
   } else {
     next();
